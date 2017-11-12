@@ -58,8 +58,23 @@ $array_tasks = [
 	]
 ];
 
-// подсчет числа задач по проектам
-$array_projects_saturation = array_count_values(array_column($array_tasks, 'project'));
+// подсчет числа задач по проекту
+function project_tasks_count ($array_tasks, $str_project) {
+	
+	$int_result = 0;
+	foreach($array_tasks as $task) {
+		
+		if ($str_project == 'Все' || $task['project'] == $str_project) {
+			
+			$int_result++;
+			
+		};
+		
+	};
+	
+	return $int_result;
+	
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -109,15 +124,7 @@ $array_projects_saturation = array_count_values(array_column($array_tasks, 'proj
 						?>
 								<li class="main-navigation__list-item <?php if ($index==0) : echo 'main-navigation__list-item--active'; endif;?>">
 									<a class="main-navigation__list-item-link" href="#"><?=$project?></a>
-									<span class="main-navigation__list-item-count">
-										<?php
-											if ($project=='Все') : 
-												echo count($array_tasks);
-											else:
-												echo $array_projects_saturation[$project];
-											endif;
-										?>
-									</span>
+									<span class="main-navigation__list-item-count"><?=project_tasks_count($array_tasks, $project)?></span>
 								</li>
 						<?php
 							endforeach;
@@ -147,7 +154,6 @@ $array_projects_saturation = array_count_values(array_column($array_tasks, 'proj
 
                     <label class="checkbox">
                         <a href="/">
-                            <!--добавить сюда аттрибут "checked", если переменная $show_complete_tasks равна единице-->
                             <input class="checkbox__input visually-hidden" type="checkbox" <?php if ($show_complete_tasks==1) : echo 'checked'; endif; ?>>
                             <span class="checkbox__text">Показывать выполненные</span>
                         </a>
