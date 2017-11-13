@@ -62,11 +62,19 @@ $array_tasks = [
 function project_tasks_count ($array_tasks, $str_project) {
 	
 	$int_result = 0;
-	foreach($array_tasks as $task) {
+	if ($str_project == 'Все') {
 		
-		if ($str_project == 'Все' || $task['project'] == $str_project) {
-			
-			$int_result++;
+		$int_result = count($array_tasks);
+		
+	} else {
+		
+		foreach($array_tasks as $task) {
+		
+			if ($str_project == 'Все' || $task['project'] == $str_project) {
+				
+				$int_result++;
+				
+			};
 			
 		};
 		
