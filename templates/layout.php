@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body><!--class="overlay"-->
+<body>
 <h1 class="visually-hidden">Дела в порядке</h1>
 
 <div class="page-wrapper">
@@ -42,15 +42,15 @@
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
                         <?php
-							foreach ($array_projects as $index => $project) :
-						?>
-								<li class="main-navigation__list-item <?php if ($index==0) : echo 'main-navigation__list-item--active'; endif;?>">
-									<a class="main-navigation__list-item-link" href="#"><?=$project?></a>
-									<span class="main-navigation__list-item-count"><?=project_tasks_count($array_tasks, $project)?></span>
-								</li>
-						<?php
-							endforeach;
-						?>
+                            foreach ($array_projects as $index => $project) :
+                        ?>
+                                <li class="main-navigation__list-item<?php if ($index==0) : echo ' main-navigation__list-item--active'; endif;?>">
+                                    <a class="main-navigation__list-item-link" href="#"><?=$project?></a>
+                                    <span class="main-navigation__list-item-count"><?=property_items_count($array_tasks, 'project', $project)?></span>
+                                </li>
+                        <?php
+                            endforeach;
+                        ?>
                     </ul>
                 </nav>
 
@@ -60,7 +60,7 @@
             <main class="content__main">
                 <?=$content?>
             </main>
-			
+            
         </div>
     </div>
 </div>
@@ -69,7 +69,6 @@
     <div class="container">
         <div class="main-footer__copyright">
             <p>© 2017, «Дела в порядке»</p>
-
             <p>Веб-приложение для удобного ведения списка дел.</p>
         </div>
 
