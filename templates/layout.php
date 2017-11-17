@@ -3,7 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?=$title?></title>
+    <title>
+        <?=$title?>
+    </title>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -41,16 +43,18 @@
 
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
-                        <?php
-                            foreach ($array_projects as $index => $project) :
-                        ?>
-                                <li class="main-navigation__list-item<?php if ($index==0) : echo ' main-navigation__list-item--active'; endif;?>">
-                                    <a class="main-navigation__list-item-link" href="#"><?=$project?></a>
-                                    <span class="main-navigation__list-item-count"><?=property_items_count($array_tasks, 'project', $project)?></span>
-                                </li>
-                        <?php
-                            endforeach;
-                        ?>
+                        <?php foreach ($array_projects as $index => $project) : ?>
+                            <li class="main-navigation__list-item
+                                <?php if ($index==0) { echo ' main-navigation__list-item--active'; };?>
+                            ">
+                                <a class="main-navigation__list-item-link" href="#">
+                                    <?=$project?>
+                                </a>
+                                <span class="main-navigation__list-item-count">
+                                    <?=property_items_count($array_tasks, 'project', $project)?>
+                                </span>
+                            </li>
+                        <?php endforeach; ?>
                     </ul>
                 </nav>
 

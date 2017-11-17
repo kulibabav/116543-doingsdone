@@ -15,30 +15,43 @@
 
     <label class="checkbox">
         <a href="/">
-            <input class="checkbox__input visually-hidden" type="checkbox" <?php if ($show_complete_tasks==1) : echo 'checked'; endif; ?>>
+            <input class="checkbox__input visually-hidden" type="checkbox"
+                <?php if ($show_complete_tasks==1) { echo ' checked'; }; ?>
+            >
             <span class="checkbox__text">Показывать выполненные</span>
         </a>
     </label>
 </div>
 
 <table class="tasks">
-    <?php
-        foreach ($array_tasks as $task) :
-    ?>
-            <tr class="tasks__item task<?php if (date_not_in_future($task['date'])) : echo ' task--important'; endif; if ($task['done']) : echo ' task--completed'; endif;?>">
-                <td class="task__select">
-                    <label class="checkbox task__checkbox">
-                        <input class="checkbox__input visually-hidden" type="checkbox">
-                        <a href="/"><span class="checkbox__text"><?=htmlspecialchars($task['name'])?></span></a>
-                    </label>
-                </td>
+    <?php foreach ($array_tasks as $task) :?>
+        <tr class="tasks__item task
+            <?php
+                if (is_soon($task['date'], SOON_DAYS)) { echo ' task--important'; };
+                if ($task['done']) { echo ' task--completed'; };
+            ?>
+        ">
+            <td class="task__select">
+                <label class="checkbox task__checkbox">
+                    <input class="checkbox__input visually-hidden" type="checkbox">
+                    <a href="/"><span class="checkbox__text">
+                        <?=htmlspecialchars($task['name'])?>
+                    </span></a>
+                </label>
+            </td>
 
-                <td class="task__file">
-                </td>
+            <td class="task__file">
+            </td>
 
-                <td class="task__date"><?=htmlspecialchars($task['date'])?></td>
-            </tr>
-    <?php
-        endforeach;
-    ?>
+            <td class="task__date">
+                <?php
+                    if (empty($task['date'])) {
+                        echo NO_DATE;
+                    } else {
+                        echo htmlspecialchars($task['date']);
+                    };
+                ?>
+            </td>
+        </tr>
+    <?php endforeach;?>
 </table>
