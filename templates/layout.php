@@ -48,7 +48,7 @@
                                 <?php if ($index==0) { echo ' main-navigation__list-item--active'; };?>
                             ">
                                 <a class="main-navigation__list-item-link" href="#">
-                                    <?=$project?>
+                                    <?=htmlspecialchars($project)?>
                                 </a>
                                 <span class="main-navigation__list-item-count">
                                     <?=property_items_count($array_tasks, 'project', $project)?>

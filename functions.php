@@ -12,7 +12,7 @@
     }
     
     // проверка, что дата находится в прошлом или настоящем
-    function is_soon($str_date, $int_days = 1) {
+    function is_soon($str_date, $int_days) {
         $bool_result = false;
         if (!empty($str_date)) {
             $date = date_create($str_date);
