@@ -47,7 +47,7 @@
                             <li class="main-navigation__list-item
                                 <?php if ($index==0) { echo ' main-navigation__list-item--active'; };?>
                             ">
-                                <a class="main-navigation__list-item-link" href="#">
+                                <a class="main-navigation__list-item-link" href="index.php<?php if ($project != 'Все') { echo "?project_id=$index"; };?>">
                                     <?=htmlspecialchars($project)?>
                                 </a>
                                 <span class="main-navigation__list-item-count">
