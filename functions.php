@@ -15,10 +15,10 @@
     function is_soon($str_date, $int_days) {
         $bool_result = false;
         if (!empty($str_date)) {
-            $date = date_create($str_date);
+            $date = date_create_from_format('d.m.Y', $str_date);
             if ($date !== false) {
                 $now = date_create();
-                $bool_result = date_diff($date, $now)->days <= $int_days;
+                $bool_result = $date < $now || date_diff($date, $now)->days <= $int_days;
             };
         };
         return $bool_result;
@@ -38,5 +38,12 @@
         };
         return $int_result;
     }
-            
+    
+    // проверка даты
+    function validateDate($value, $format = 'd.m.Y')
+    {
+        $d = date_create_from_format($format, $value);
+        return $d && $d->format($format) == $value;
+    }
+    
 ?>
