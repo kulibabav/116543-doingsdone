@@ -45,9 +45,9 @@
                     <ul class="main-navigation__list">
                         <?php foreach ($array_projects as $index => $project) : ?>
                             <li class="main-navigation__list-item
-                                <?php if ($index==0) { echo ' main-navigation__list-item--active'; };?>
+                                <?php if ($index==$selected_project_id) { echo ' main-navigation__list-item--active'; };?>
                             ">
-                                <a class="main-navigation__list-item-link" href="#">
+                                <a class="main-navigation__list-item-link" href="index.php?project_id=<?=$index?>">
                                     <?=htmlspecialchars($project)?>
                                 </a>
                                 <span class="main-navigation__list-item-count">
