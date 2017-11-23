@@ -1,8 +1,7 @@
 <?php
 $name = $_POST['name'] ?? '';
-$project = $_POST['project'] ?? '';
+$project = $_POST['project_id'] ?? '';
 $date = $_POST['date'] ?? '';
-$project = $_POST['project'] ?? '';
 $preview = $_FILES['preview']['name'] ?? '';
 
 $error_name = $errors['name'] ?? '';
@@ -36,10 +35,10 @@ $error_preview = $errors['preview'] ?? '';
                 <?php if ($error_project) { echo ' form__input--error'; };?>
             " name="project" id="project">
                 <?php
-                    foreach ($array_projects as $project_item) :
+                    foreach ($array_projects as $project_id => $project_item) :
                         if ($project_item != 'Все') :
                 ?>
-                            <option value="<?=$project_item?>">
+                            <option value="<?=$project_id?>">
                                 <?=$project_item?>
                             </option>
                 <?php
