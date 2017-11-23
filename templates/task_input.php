@@ -33,7 +33,7 @@ $error_preview = $errors['preview'] ?? '';
 
             <select class="form__input form__input--select
                 <?php if ($error_project) { echo ' form__input--error'; };?>
-            " name="project" id="project">
+            " name="project_id" id="project">
                 <?php
                     foreach ($array_projects as $project_id => $project_item) :
                         if ($project_item != 'Все') :
