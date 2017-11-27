@@ -39,10 +39,14 @@
             </nav>
 
             <label class="checkbox">
-                <a href="/">
-                    <input class="checkbox__input visually-hidden" type="checkbox"
-                        <?php if ($show_complete_tasks==1) { echo ' checked'; }; ?>
-                    >
+                <a href="<?php
+                    echo $_SERVER['REQUEST_URI'] . (stripos($_SERVER['REQUEST_URI'], '?') === false ? '?' : '&') . 'show_completed=' . ($show_completed_tasks==0 ? '1' : '0');
+                ?>">
+                    <input class="checkbox__input visually-hidden" type="checkbox" <?php
+                        if ($show_completed_tasks==1) {
+                            echo ' checked';
+                        };
+                    ?>>
                     <span class="checkbox__text">Показывать выполненные</span>
                 </a>
             </label>

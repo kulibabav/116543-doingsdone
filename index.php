@@ -19,6 +19,15 @@
     $content_data = [];
     $content_template = 'templates/guest.php';
     
+    // РАБОТА С COOKIE
+    if (isset($_COOKIE['show_completed_tasks'])) {
+        $show_completed_tasks = $_COOKIE['show_completed_tasks'];
+    };
+    
+    $array_tasks = array_filter($array_tasks, function($task) use ($show_completed_tasks) {
+        return $task['done']==$show_completed_tasks || !$task['done'];
+    });
+    
     // ЧТЕНИЕ ДАННЫХ ИЗ СЕССИИ
     
     // запуск сессии
@@ -34,7 +43,7 @@
         $content_data['selected_project_id'] = 0;
         $content_data['array_tasks'] = $array_tasks;
         $content_data['array_tasks_to_show'] = $array_tasks;
-        $content_data['show_complete_tasks'] = $show_complete_tasks;
+        $content_data['show_completed_tasks'] = $show_completed_tasks;
         $content_template = 'templates/index.php';
     };
     
@@ -115,6 +124,12 @@
     };
     
     // ОБРАБОТКА GET ПАРАМЕТРОВ
+    
+    // обработка нажатия чекбокса "Показывать выполненные"
+    if (isset($_GET['show_completed'])) {
+        setcookie('show_completed_tasks', $_GET['show_completed'], strtotime("+30 days"),'/');
+        header('Location: ' . str_replace(['?show_completed=1', '&show_completed=1','?show_completed=0', '&show_completed=0'], '', $_SERVER['REQUEST_URI']));
+    };
     
     // обработка нажатия кнопки "Войти"
     if (isset($_GET['login']) && !isset($user)) {
