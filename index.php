@@ -41,7 +41,7 @@
     // ОБРАБОТКА POST ЗАПРОСОВ
     
     // обработка входа под учетной записью
-    if  ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['password'])) {
+    if  ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])) {
         
         $required = ['email', 'password'];
         $rules = ['email' => 'validateEmail'];
@@ -53,13 +53,13 @@
             // ищем пользователя
             $user_found = false;
             require_once('userdata.php');
-            foreach($users as $user) {
+            foreach($users as $user_item) {
                 // если нашелся user
-                if ($_POST['email'] == $user['email']) {
+                if ($_POST['email'] == $user_item['email']) {
                     $user_found = true;
                     // проверяем пароль
-                    if (password_verify($_POST['password'], $user['password'])) {
-                        $_SESSION['user'] = $user;
+                    if (password_verify($_POST['password'], $user_item['password'])) {
+                        $_SESSION['user'] = $user_item;
                         header('Location: index.php');
                     } else {
                         $errors['password'] = 'Вы ввели неверный пароль';
@@ -67,7 +67,6 @@
                     break;
                 };
             };
-            
             // если не нашелся user
             if (!$user_found) {
                 $errors['email'] = 'Пользователь с указанным email не найден';
@@ -82,7 +81,7 @@
     };
     
     // обработка добавления задачи
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' &&  isset($_POST['project_id']) && isset($user)) {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' &&  isset($_POST['task_input']) && isset($user)) {
         
         $required = ['name', 'project_id'];
         $rules = ['date' => 'validateDate'];
@@ -100,6 +99,7 @@
             ]);
             // обновление данных для заполнения шаблона
             $content_data['array_tasks'] = $array_tasks;
+            $content_data['array_tasks_to_show'] = $array_tasks;
             // сохранение вложенного файла
             if (isset($_FILES['preview'])) {
                 $file_path = __DIR__ . '/' . $_FILES['preview']['name'];

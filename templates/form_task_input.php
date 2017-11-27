@@ -83,7 +83,7 @@ $error_preview = $errors['preview'] ?? '';
         </div>
 
         <div class="form__row form__row--controls">
-            <input class="button" type="submit" name="" value="Добавить">
+            <input class="button" type="submit" name="task_input" value="Добавить">
         </div>
     </form>
 </div>
