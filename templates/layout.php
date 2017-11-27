@@ -52,16 +52,9 @@
             <p>© 2017, «Дела в порядке»</p>
             <p>Веб-приложение для удобного ведения списка дел.</p>
         </div>
-
-        <a class="main-footer__button button button--plus" href="index.php<?php
-                if (count($user)) {
-                    echo '?add=true';
-                } else {
-                    echo '?login=true';
-                };
-        ?>">
-            Добавить задачу
-        </a>
+        <?php if (count($user)) : ?>
+            <a class="main-footer__button button button--plus" href="index.php?add=true">Добавить задачу</a>
+        <?php endif; ?>
 
         <div class="main-footer__social social">
             <span class="visually-hidden">Мы в соцсетях:</span>

@@ -64,6 +64,7 @@
                     } else {
                         $errors['password'] = 'Вы ввели неверный пароль';
                     };
+                    break;
                 };
             };
             
@@ -81,7 +82,7 @@
     };
     
     // обработка добавления задачи
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' &&  isset($_POST['project_id'])) {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' &&  isset($_POST['project_id']) && isset($user)) {
         
         $required = ['name', 'project_id'];
         $rules = ['date' => 'validateDate'];
@@ -116,7 +117,7 @@
     // ОБРАБОТКА GET ПАРАМЕТРОВ
     
     // обработка нажатия кнопки "Войти"
-    if (isset($_GET['login'])) {
+    if (isset($_GET['login']) && !isset($user)) {
         $layout_data['overlay'] = ' class="overlay"';
         $layout_data['form'] = use_template('templates/form_login.php', [
             'errors' => $errors
@@ -124,7 +125,7 @@
     };
     
     // обработка нажатия кнопки "Добавить задачу"
-    if (isset($_GET['add'])) {
+    if (isset($_GET['add']) && isset($user)) {
         $layout_data['overlay'] = ' class="overlay"';
         $layout_data['form'] = use_template('templates/form_task_input.php', [
             'errors' => $errors,
@@ -133,7 +134,7 @@
     };
     
     // если выбран проект для показа (параметр project_id)
-    if (isset($_GET['project_id'])) {
+    if (isset($_GET['project_id']) && isset($user)) {
         $selected_project_id = $_GET['project_id'];
         $project = $array_projects[$selected_project_id];
         if (isset($project)) {
