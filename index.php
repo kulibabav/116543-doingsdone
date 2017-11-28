@@ -125,7 +125,7 @@
     
     // ОБРАБОТКА GET ПАРАМЕТРОВ
     
-    // обработка нажатия чекбокса "Показывать выполненные"
+    // обработка нажатия чекбокса "Показывать выполненные" (задание 11)
     if (isset($_GET['show_completed'])) {
         setcookie('show_completed_tasks', $_GET['show_completed'], strtotime("+30 days"),'/');
         header('Location: ' . str_replace(['?show_completed=1', '&show_completed=1','?show_completed=0', '&show_completed=0'], '', $_SERVER['REQUEST_URI']));
