@@ -39,11 +39,32 @@
         return $int_result;
     }
     
+    // валидация формы
+    function validateForm($required, $rules) {
+        $errors = [];
+        foreach ($_POST as $key => $value) {
+            if (in_array($key, $required) && $value == '') {
+                $errors[$key] = 'Пожалуйста, заполните это поле';
+                continue;
+            };
+            if (array_key_exists($key, $rules) && $value <> '') {
+                $result = call_user_func($rules[$key], $value);
+                if (!$result) {
+                    $errors[$key] = 'Пожалуйста, укажите корректное значение';
+                };
+            };
+        };
+        return $errors;
+    }
+    
     // проверка даты
-    function validateDate($value, $format = 'd.m.Y')
-    {
+    function validateDate($value, $format = 'd.m.Y') {
         $d = date_create_from_format($format, $value);
         return $d && $d->format($format) == $value;
     }
     
+    // проверка email
+    function validateEmail($value) {
+        return filter_var($value, FILTER_VALIDATE_EMAIL);
+    }
 ?>
