@@ -3,7 +3,7 @@ USE doingsdone;
 CREATE TABLE projects (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name CHAR(32),
-    author INT FOREIGN KEY REFERENCES users (id)
+    users_id INT FOREIGN KEY REFERENCES users (id) ON DELETE CASCADE
 );
 CREATE TABLE tasks (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -12,8 +12,8 @@ CREATE TABLE tasks (
     name CHAR(128),
     file TEXT,
     deadline DATE,
-    users_id INT FOREIGN KEY REFERENCES users (id),
-    projects_id INT FOREIGN KEY REFERENCES projects (id)
+    users_id INT FOREIGN KEY REFERENCES users (id) ON DELETE CASCADE,
+    projects_id INT FOREIGN KEY REFERENCES projects (id) ON DELETE CASCADE
 );
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
