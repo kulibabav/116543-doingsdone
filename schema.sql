@@ -1,8 +1,9 @@
 CREATE DATABASE doingsdone;
 USE doingsdone;
 CREATE TABLE projects (
-    name CHAR(32) PRIMARY KEY,
-    author INT
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name CHAR(32),
+    author INT FOREIGN KEY REFERENCES users (id)
 );
 CREATE TABLE tasks (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -11,8 +12,8 @@ CREATE TABLE tasks (
     name CHAR(128),
     file TEXT,
     deadline DATE,
-    author INT,
-    project INT
+    users_id INT FOREIGN KEY REFERENCES users (id),
+    projects_id INT FOREIGN KEY REFERENCES projects (id)
 );
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -21,8 +22,6 @@ CREATE TABLE users (
     password CHAR(32),
     contacts TEXT
 );
-CREATE UNIQUE INDEX users_email_unique ON users (email);
+CREATE UNIQUE INDEX users_email ON users (email);
+CREATE INDEX tasks_name ON tasks (name);
 CREATE INDEX tasks_deadline ON tasks (deadline);
-CREATE INDEX tasks_author ON tasks (author);
-CREATE INDEX tasks_project ON tasks (project);
-CREATE INDEX users_email ON users (email);
