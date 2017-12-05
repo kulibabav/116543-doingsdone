@@ -4,7 +4,10 @@
     
     // подключение библиотеки функций
     require_once 'functions.php';
-        
+    
+    // подключение конфига
+    require_once 'init.php';
+    
     // подключение конфига
     require_once 'config.php';
     
