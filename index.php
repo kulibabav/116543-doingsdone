@@ -2,10 +2,11 @@
 
     // ОПРЕДЕЛЕНИЕ ФУНКЦИЙ И ПАРАМЕТРОВ СТРАНИЦЫ ПО УМОЛЧАНИЮ
     
-    // подключение библиотеки функций
+    // подключение библиотек c функциями
     require_once 'functions.php';
+    require_once 'mysql_helper.php';   
     
-    // подключение конфига
+    // инициализация работы с базой данных
     require_once 'init.php';
     
     // подключение конфига
@@ -27,7 +28,7 @@
         $show_completed_tasks = $_COOKIE['show_completed_tasks'];
     };
     
-    $array_tasks = array_filter($array_tasks, function($task) use ($show_completed_tasks) {
+    $array_tasks = array_filter([], function($task) use ($show_completed_tasks) {
         return $task['done']==$show_completed_tasks || !$task['done'];
     });
     
@@ -63,26 +64,26 @@
         if(!count($errors)) {
             
             // ищем пользователя
-            $user_found = false;
-            require_once('userdata.php');
-            foreach($users as $user_item) {
-                // если нашелся user
-                if ($_POST['email'] == $user_item['email']) {
-                    $user_found = true;
-                    // проверяем пароль
-                    if (password_verify($_POST['password'], $user_item['password'])) {
-                        $_SESSION['user'] = $user_item;
+            $sql = 'SELECT * FROM users WHERE email = ?';
+            $stmt = db_get_prepare_stmt($con, $sql, [$_POST['email']]);
+            $success = mysqli_stmt_execute($stmt);
+            if (!$success) {
+                print(use_template('templates/error.php', ['error_text' => mysqli_error($con)]));
+                exit;
+            } else {
+                $result = mysqli_stmt_get_result($stmt);
+                if ($user_found = mysqli_fetch_assoc($result)) {
+                    if (password_verify($_POST['password'], $user_found['password'])) {
+                        $_SESSION['user'] = $user_found;
                         header('Location: index.php');
                     } else {
                         $errors['password'] = 'Вы ввели неверный пароль';
                     };
-                    break;
+                } else {
+                    $errors['email'] = 'Пользователь с указанным email не найден';
                 };
             };
-            // если не нашелся user
-            if (!$user_found) {
-                $errors['email'] = 'Пользователь с указанным email не найден';
-            };
+            
         };
         
         // если есть ошибки — оставляем форму открытой
@@ -102,20 +103,30 @@
         // если нет ошибок валидации
         if (!count($errors)) {
             
-            // добавление задачи в массив
-            array_unshift($array_tasks, [
-                'name' => $_POST['name'],
-                'project' => $array_projects[$_POST['project_id']],
-                'date' => $_POST['date'],
-                'done' => false
-            ]);
-            // обновление данных для заполнения шаблона
-            $content_data['array_tasks'] = $array_tasks;
-            $content_data['array_tasks_to_show'] = $array_tasks;
             // сохранение вложенного файла
-            if (isset($_FILES['preview'])) {
+            if (isset($_FILES['preview']['name'])) {
                 $file_path = __DIR__ . '/' . $_FILES['preview']['name'];
                 move_uploaded_file($_FILES['preview']['tmp_name'], $file_path);
+            };
+            $project_id = $_POST['project_id'] == '' ? 1 : intval($_POST['project_id']);
+            $date = $_POST['date'] == '' ? 'null' : "'$_POST[date]'";
+            $file = $_FILES['preview']['name'];
+            // запись в базу данных
+            $sql = "INSERT INTO tasks SET "
+                    . "created = NOW(), "
+                    . "name = ?, "
+                    . "file = '$file', "
+                    . "deadline = $date, "
+                    . "users_id = $user[id], "
+                    . "projects_id = $project_id";
+            print($sql);
+            $stmt = db_get_prepare_stmt($con, $sql, [$_POST['name']]);
+            $success = mysqli_stmt_execute($stmt);
+            if ($success) {
+                header('Location: index.php');
+            } else {
+                print(use_template('templates/error.php', ['error_text' => mysqli_error($con)]));
+                exit;
             };
             
         // если есть ошибки валидации
@@ -165,6 +176,8 @@
             die();
         };
     };
+    
+    
     
     // получение основного содержания
     $index_content = use_template($content_template, $content_data);
