@@ -13,8 +13,7 @@ SELECT
     p.name,
     u.id
 FROM
-    (SELECT 'Все' AS name
-    UNION SELECT 'Входящие'
+    (SELECT 'Входящие' AS name
     UNION SELECT 'Учеба'
     UNION SELECT 'Работа'
     UNION SELECT 'Домашние дела'
