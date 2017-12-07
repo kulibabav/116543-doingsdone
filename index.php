@@ -209,7 +209,7 @@
                         . "'$selected_deadline' = 'all' "
                         . "OR ('$selected_deadline' = 'today' AND deadline = CURDATE()) "
                         . "OR ('$selected_deadline' = 'tomorrow' AND deadline = CURDATE() + INTERVAL 1 DAY) "
-                        . "OR ('$selected_deadline' = 'expired' AND IFNULL(deadline, CURDATE()) < CURDATE()) "
+                        . "OR ('$selected_deadline' = 'expired' AND IFNULL(deadline, CURDATE()) < CURDATE()) AND completed IS NULL "
                     . ")";
         $result = mysqli_query($con, $sql);
         if ($result) {

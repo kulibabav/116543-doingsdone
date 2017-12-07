@@ -67,8 +67,8 @@
             <?php foreach ($array_tasks as $task) :?>
                 <tr class="tasks__item task
                     <?php
-                        if (is_soon($task['date'], SOON_DAYS)) { echo ' task--important'; };
-                        if ($task['completed'] <> null) { echo ' task--completed'; };
+                        if (is_soon($task['deadline'], SOON_DAYS) && $task['completed'] == null) { echo ' task--important'; };
+                        if ($task['completed'] != null) { echo ' task--completed'; };
                     ?>
                 ">
                     <td class="task__select">

@@ -12,14 +12,12 @@
     }
     
     // проверка, что дата находится в прошлом или настоящем
-    function is_soon($str_date, $int_days) {
+    function is_soon($date, $int_days) {
         $bool_result = false;
-        if (!empty($str_date)) {
-            $date = date_create_from_format('d.m.Y', $str_date);
-            if ($date !== false) {
-                $now = date_create();
-                $bool_result = $date < $now || date_diff($date, $now)->days <= $int_days;
-            };
+        if ($date != null) {
+            $date = date_create($date);
+            $now = date_create();
+            $bool_result = $date < $now || date_diff($date, $now)->days <= $int_days;
         };
         return $bool_result;
     }
