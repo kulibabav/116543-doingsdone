@@ -28,38 +28,38 @@ SELECT
     t.name,
     t.deadline,
     u.id,
-    t.projects_id
+    t.projects_id + (u.id - 1) * 5
 FROM
     (SELECT
         NULL AS completed,
         'Собеседование в IT компании' AS name,
         STR_TO_DATE('01.06.2018', '%d.%m.%Y') AS deadline,
-        4 AS projects_id
+        3 AS projects_id
     UNION SELECT
         NULL,
         'Выполнить тестовое задание',
         STR_TO_DATE('25.05.2018', '%d.%m.%Y'),
-        4
+        3
     UNION SELECT
         STR_TO_DATE('2018-04-20 14:20:00', '%Y-%m-%d %H:%i:%s'),
         'Сделать задание первого раздела',
         STR_TO_DATE('21.04.2018', '%d.%m.%Y'),
-        3
+        2
     UNION SELECT
         NULL,
         'Встреча с другом',
         STR_TO_DATE('22.04.2018', '%d.%m.%Y'),
-        2
+        1
     UNION SELECT
         NULL,
         'Купить корм для кота',
         NULL,
-        5
+        4
     UNION SELECT
         NULL,
         'Заказать пиццу',
         NULL,
-        5) t
+        4) t
     LEFT JOIN users u ON TRUE;
     
 # Получить список из всех проектов для одного пользователя

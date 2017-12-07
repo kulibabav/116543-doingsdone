@@ -67,4 +67,35 @@
     function validateEmail($value) {
         return filter_var($value, FILTER_VALIDATE_EMAIL);
     }
+    
+    // добавление GET-параметра в адресную строку
+    function add_get_param($name, $value) {
+        $url = strtok($_SERVER["REQUEST_URI"],'?') . '?' . $name . '=' . $value;
+        foreach($_GET as $var_name => $var_value) {
+            if ($var_name != $name) {
+                $url = $url . '&' . $var_name . '=' . $var_value ;
+            };
+        };
+        return $url;
+    }
+    
+    // удаление GET-параметра из адресной строки
+    function remove_get_param($name) {
+        $url = strtok($_SERVER["REQUEST_URI"],'?');
+        $delimiter = '?';
+        foreach($_GET as $var_name => $var_value) {
+            if ($var_name != $name) {
+                $url = $url . $delimiter . $var_name . '=' . $var_value ;
+                $delimiter = '&';
+            };
+        };
+        return $url;
+    }
+    
+    // вывод сообщения об ошибке
+    function show_error($error_text) {
+        print(use_template('templates/error.php', ['error_text' => $error_text]));
+        exit();
+    };
+    
 ?>

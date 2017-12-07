@@ -35,14 +35,14 @@ $error_preview = $errors['preview'] ?? '';
                 <?php if ($error_project) { echo ' form__input--error'; };?>
             " name="project_id" id="project">
                 <?php
-                    foreach ($array_projects as $index => $item) :
-                        if ($item != 'Все') :
+                    foreach ($array_projects as $item) :
+                        if ($item['id'] != 0) :
                 ?>
-                            <option value="<?=$index?>"
-                                <?php if ($index==$project_id) { echo 'selected'; };?>
-                            >
-                                <?=$item?>
-                            </option>
+                        <option value="<?=$item['id']?>"
+                            <?php if ($item['id']==$project_id) { echo 'selected'; };?>
+                        >
+                            <?=$item['name']?>
+                        </option>
                 <?php
                         endif;
                     endforeach;

@@ -51,8 +51,7 @@
             $stmt = db_get_prepare_stmt($con, $sql, [$_POST['email']]);
             $success = mysqli_stmt_execute($stmt);
             if (!$success) {
-                print(use_template('templates/error.php', ['error_text' => mysqli_error($con)]));
-                exit;
+                show_error(mysqli_error($con));
             } elseif (mysqli_num_rows(mysqli_stmt_get_result($stmt))) {
                 $errors['email'] = 'Указанный email уже зарегистрирован';
             };
@@ -66,8 +65,7 @@
             if ($success) {
                 header('Location: index.php?login=true');
             } else {
-                print(use_template('templates/error.php', ['error_text' => mysqli_error($con)]));
-                exit;
+                show_error(mysqli_error($con));
             };
         } else {
             $content_data['errors'] = $errors;
