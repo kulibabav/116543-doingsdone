@@ -20,7 +20,7 @@
             </ul>
         </nav>
 
-        <a class="button button--transparent button--plus content__side-button" href="#">Добавить проект</a>
+        <a class="button button--transparent button--plus content__side-button" href="<?=add_get_param('add_project', 'true')?>">Добавить проект</a>
     </section>
 
     <main class="content__main">
@@ -81,6 +81,11 @@
                     </td>
 
                     <td class="task__file">
+                        <?php
+                            if ($task['file'] != '') {
+                                echo '<a href="' . $task['file'] . '"><img src="img/download-link.png" width="14" height="16" alt="Скачать файл"></a>';
+                            };
+                        ?>
                     </td>
 
                     <td class="task__date">

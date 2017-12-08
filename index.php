@@ -66,6 +66,39 @@
             show_error(mysqli_error($con));
         };
         
+        // ОБРАБОТКА ДОБАВЛЕНИЕ ПРОЕКТА
+        
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' &&  isset($_POST['project_input'])) {
+            
+            // выполняем валидацию формы
+            $required = ['name'];
+            $errors = validateForm($required, []);
+            
+            if (!count($errors)) {
+                
+                // ЕСЛИ ВАЛИДАЦИЯ ПРОШЛА УСПЕШНО
+                
+                // определяем параметры для подстановки в запрос
+                $name = $_POST['name'];
+                $users_id = $user['id'];
+                
+                // записываем проект в базу данных
+                $sql = "INSERT INTO projects SET "
+                        . "name = ?, "
+                        . "users_id = $users_id";
+                $stmt = db_get_prepare_stmt($con, $sql, [$name]);
+                $success = mysqli_stmt_execute($stmt);
+                if ($success) {
+                    // если запись прошла успешно — обновляем страницу
+                    header('Location: ' . remove_get_param('add_project'));
+                } else {
+                    // если возникли ошибки при записи — выводим ошибку и завершаем сценарий
+                    show_error(mysqli_error($con));
+                };
+                
+            };
+        };
+        
         // ОБРАБОТКА ДОБАВЛЕНИЯ ЗАДАЧИ
         
         if ($_SERVER['REQUEST_METHOD'] == 'POST' &&  isset($_POST['task_input'])) {
@@ -152,6 +185,14 @@
                 // если возникли ошибки при записи — выводим ошибку и завершаем сценарий
                 show_error(mysqli_error($con));
             };
+        };
+        
+        // обрабатываем нажатие кнопки "Добавить проект"
+        if (isset($_GET['add_project'])) {
+            // добавляем в параметры прототипа форму добавления проекта и признак модального режима
+            $errors = $errors ?? [];
+            $layout_data['form'] = use_template('templates/form_project_input.php', ['errors' => $errors]);
+            $layout_data['overlay'] = ' class="overlay"';
         };
         
         // обрабатываем нажатие кнопки "Добавить задачу"
