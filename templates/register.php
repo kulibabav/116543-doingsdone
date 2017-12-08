@@ -35,7 +35,7 @@ $error_name = $errors['name'] ?? '';
                 <label class="form__label" for="password">Пароль <sup>*</sup></label>
 
                 <input class="form__input
-                    <?php if ($error_email) { echo 'form__input--error'; };?>
+                    <?php if ($error_password) { echo 'form__input--error'; };?>
                 " type="password" name="password" id="password" value="" placeholder="Введите пароль">
                 
                 <?php if ($error_password) : ?>

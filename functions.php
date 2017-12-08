@@ -12,14 +12,12 @@
     }
     
     // проверка, что дата находится в прошлом или настоящем
-    function is_soon($str_date, $int_days) {
+    function is_soon($date, $int_days) {
         $bool_result = false;
-        if (!empty($str_date)) {
-            $date = date_create_from_format('d.m.Y', $str_date);
-            if ($date !== false) {
-                $now = date_create();
-                $bool_result = $date < $now || date_diff($date, $now)->days <= $int_days;
-            };
+        if ($date != null) {
+            $date = date_create($date);
+            $now = date_create();
+            $bool_result = $date < $now || date_diff($date, $now)->days <= $int_days;
         };
         return $bool_result;
     }
@@ -67,4 +65,35 @@
     function validateEmail($value) {
         return filter_var($value, FILTER_VALIDATE_EMAIL);
     }
+    
+    // добавление GET-параметра в адресную строку
+    function add_get_param($name, $value) {
+        $url = strtok($_SERVER["REQUEST_URI"],'?') . '?' . $name . '=' . $value;
+        foreach($_GET as $var_name => $var_value) {
+            if ($var_name != $name) {
+                $url = $url . '&' . $var_name . '=' . $var_value ;
+            };
+        };
+        return $url;
+    }
+    
+    // удаление GET-параметра из адресной строки
+    function remove_get_param($name) {
+        $url = strtok($_SERVER["REQUEST_URI"],'?');
+        $delimiter = '?';
+        foreach($_GET as $var_name => $var_value) {
+            if ($var_name != $name) {
+                $url = $url . $delimiter . $var_name . '=' . $var_value ;
+                $delimiter = '&';
+            };
+        };
+        return $url;
+    }
+    
+    // вывод сообщения об ошибке
+    function show_error($error_text) {
+        print(use_template('templates/error.php', ['error_text' => $error_text]));
+        exit();
+    };
+    
 ?>
