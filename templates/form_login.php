@@ -6,7 +6,9 @@ $error_password = $errors['password'] ?? '';
 ?>
 
 <div class="modal">
-    <button class="modal__close" type="button" name="button">Закрыть</button>
+    <a href="<?=remove_get_param('login')?>">
+        <button class="modal__close" type="button" name="button">Закрыть</button>
+    </a>
 
     <h2 class="modal__heading">Вход на сайт</h2>
 

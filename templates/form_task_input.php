@@ -11,7 +11,9 @@ $error_preview = $errors['preview'] ?? '';
 ?>
 
 <div class="modal">
-    <button class="modal__close" type="button" name="button">Закрыть</button>
+    <a href="<?=remove_get_param('add')?>">
+        <button class="modal__close" type="button" name="button">Закрыть</button>
+    </a>
 
     <h2 class="modal__heading">Добавление задачи</h2>
 
@@ -41,7 +43,7 @@ $error_preview = $errors['preview'] ?? '';
                         <option value="<?=$item['id']?>"
                             <?php if ($item['id']==$project_id) { echo 'selected'; };?>
                         >
-                            <?=$item['name']?>
+                            <?=htmlspecialchars($item['name'])?>
                         </option>
                 <?php
                         endif;

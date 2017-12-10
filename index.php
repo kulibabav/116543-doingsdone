@@ -42,28 +42,83 @@
         // загружаем проекты пользователя в массив и добавялем в параметры шаблона
         $sql =
           "SELECT "
-            . "0 AS id, "
-            . "'Все' AS name, "
-            . "(SELECT COUNT(tc.id) FROM tasks tc WHERE tc.users_id = $user[id]) AS tasks_count "
-        . "UNION ALL "
-        . "SELECT "
             . "p.id, "
             . "p.name, "
-            . "COUNT(t.id) "
+            . "IFNULL(t.count_all, 0) AS count_all, "
+            . "IFNULL(t.count_all, 0) - IFNULL(t.count_completed, 0) AS count_active "
         . "FROM "
-            . "projects p LEFT JOIN tasks t ON "
-                . "p.users_id = t.users_id "
-                . "AND p.id = t.projects_id "        
-        . "WHERE "
-            . "p.users_id = $user[id] "
-        . "GROUP BY "
-            . "p.id, p.name";
+            . "(SELECT "
+                . "0 AS id, "
+                . "'Все' AS name "
+            . "UNION ALL "
+            . "SELECT "
+                . "p1.id, "
+                . "p1.name "
+            . "FROM "
+                . "projects p1 "
+            . "WHERE "
+                . "p1.users_id = $user[id]) AS p "
+            . "LEFT JOIN "
+                . "(SELECT "
+                    . "0 AS projects_id, "
+                    . "COUNT(t1.id) AS count_all, "
+                    . "COUNT(t1.completed) AS count_completed "
+                . "FROM "
+                    . "tasks t1 "
+                . "WHERE "
+                    . "t1.users_id = $user[id] "
+                . "UNION ALL "
+                . "SELECT "
+                    . "t2.projects_id, "
+                    . "COUNT(t2.id), "
+                    . "COUNT(t2.completed) "
+                . "FROM "
+                    . "tasks t2 "
+                . "WHERE "
+                    . "t2.users_id = $user[id] "
+                . "GROUP BY "
+                    . "t2.projects_id) AS t "
+            . "ON "
+                . "p.id = t.projects_id";
         $result = mysqli_query($con, $sql);
         if ($result) {
             $array_projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
             $content_data['array_projects'] = $array_projects;
         } else {
             show_error(mysqli_error($con));
+        };
+        
+        // ОБРАБОТКА ДОБАВЛЕНИЕ ПРОЕКТА
+        
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' &&  isset($_POST['project_input'])) {
+            
+            // выполняем валидацию формы
+            $required = ['name'];
+            $errors = validateForm($required, []);
+            
+            if (!count($errors)) {
+                
+                // ЕСЛИ ВАЛИДАЦИЯ ПРОШЛА УСПЕШНО
+                
+                // определяем параметры для подстановки в запрос
+                $name = $_POST['name'];
+                $users_id = $user['id'];
+                
+                // записываем проект в базу данных
+                $sql = "INSERT INTO projects SET "
+                        . "name = ?, "
+                        . "users_id = $users_id";
+                $stmt = db_get_prepare_stmt($con, $sql, [$name]);
+                $success = mysqli_stmt_execute($stmt);
+                if ($success) {
+                    // если запись прошла успешно — обновляем страницу
+                    header('Location: ' . remove_get_param('add_project'));
+                } else {
+                    // если возникли ошибки при записи — выводим ошибку и завершаем сценарий
+                    show_error(mysqli_error($con));
+                };
+                
+            };
         };
         
         // ОБРАБОТКА ДОБАВЛЕНИЯ ЗАДАЧИ
@@ -152,6 +207,14 @@
                 // если возникли ошибки при записи — выводим ошибку и завершаем сценарий
                 show_error(mysqli_error($con));
             };
+        };
+        
+        // обрабатываем нажатие кнопки "Добавить проект"
+        if (isset($_GET['add_project'])) {
+            // добавляем в параметры прототипа форму добавления проекта и признак модального режима
+            $errors = $errors ?? [];
+            $layout_data['form'] = use_template('templates/form_project_input.php', ['errors' => $errors]);
+            $layout_data['overlay'] = ' class="overlay"';
         };
         
         // обрабатываем нажатие кнопки "Добавить задачу"

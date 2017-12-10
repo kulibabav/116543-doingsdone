@@ -22,21 +22,6 @@
         return $bool_result;
     }
     
-    // подсчет числа элементов массива с указанным значением свойства
-    function property_items_count ($array, $property_name, $property_value) {
-        $int_result = 0;
-        if ($property_value == 'Все') {
-            $int_result = count($array);
-        } else {
-            foreach($array as $item) {
-                if ($item[$property_name] == $property_value) {
-                    $int_result++;
-                };
-            };
-        };
-        return $int_result;
-    }
-    
     // валидация формы
     function validateForm($required, $rules) {
         $errors = [];
