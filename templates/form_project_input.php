@@ -4,7 +4,9 @@ $error_name = $errors['name'] ?? '';
 ?>
 
 <div class="modal">
-    <button class="modal__close" type="button" name="button">Закрыть</button>
+    <a href="<?=remove_get_param('add_project')?>">
+        <button class="modal__close" type="button" name="button">Закрыть</button>
+    </a>
 
     <h2 class="modal__heading">Добавление проекта</h2>
 

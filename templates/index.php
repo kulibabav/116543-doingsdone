@@ -13,7 +13,7 @@
                             <?=htmlspecialchars($project['name'])?>
                         </a>
                         <span class="main-navigation__list-item-count">
-                            <?=$project['tasks_count']?>
+                            <?=($show_completed_tasks==0 ? $project['count_active'] : $project['count_all'])?>
                         </span>
                     </li>
                 <?php endforeach; ?>
